@@ -23,25 +23,41 @@ After training the agent on 50,000 episodes we now test this on ten games which 
 
 # **Deep Q-Network (DQN) — CartPole-v1**
 
-I also implemented a modern DQN agent for CartPole-v1, which includes an experience replay buffer using a deque, Target network, policy network and an adaptive epsilon-greedy strategy (decaying epsilon). This DQN has the following hyperparameters:
+I also implemented a modern DQN agent for CartPole-v1. The implementation was inspired by Mnih, V., Kavukcuoglu, K., Silver, D., et al. (2013). Playing Atari with Deep Reinforcement Learning. arXiv:1312.5602. This implementation includes an experience replay buffer using a deque, Target network, policy network and an adaptive epsilon-greedy strategy (decaying epsilon). 
 
-batch size: 32, epsilon decay: 0.98, learning rate: 1e-3, hidden layer size: 32
+The pseudocode implementation is written as follows:
+
+<img width="972" height="497" alt="Screenshot 2025-10-11 at 5 56 01 PM" src="https://github.com/user-attachments/assets/6a7c9c41-0253-4de9-b34b-0870e582b195" />
+
 
 # Results
+
+This DQN has the following hyperparameters:
+
+batch size: 32, epsilon decay: 0.98, learning rate: 1e-3, hidden layer size: 32
 
 The DQN agent surpassed the "solved" threshold (average reward ≥195 over 100 episodes) by episode 100, achieving an average reward of 222.4. Please see below for the sample log:
 
 Episode 0/500, Avg Reward: 23.00, Epsilon: 0.980
+
 Episode 50/500, Avg Reward: 31.56, Epsilon: 0.357
+
 Episode 100/500, Avg Reward: 222.42, Epsilon: 0.130
+
 Episode 150/500, Avg Reward: 217.46, Epsilon: 0.047
+
 Episode 200/500, Avg Reward: 193.94, Epsilon: 0.017
+
 Episode 250/500, Avg Reward: 203.72, Epsilon: 0.010
+
 Episode 300/500, Avg Reward: 170.04, Epsilon: 0.010
+
 Episode 350/500, Avg Reward: 213.18, Epsilon: 0.010
+
 Episode 400/500, Avg Reward: 270.96, Epsilon: 0.010
+
 Episode 450/500, Avg Reward: 222.08, Epsilon: 0.010
-Training complete!
+
 
 After initial exploration, performance jumps rapidly to optimal policies and continues strong play, with occasional fluctuation, quite typical for a DQN.
 
