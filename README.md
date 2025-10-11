@@ -44,3 +44,9 @@ Episode 450/500, Avg Reward: 222.08, Epsilon: 0.010
 Training complete!
 
 After initial exploration, performance jumps rapidly to optimal policies and continues strong play, with occasional fluctuation, quite typical for a DQN.
+
+
+https://github.com/user-attachments/assets/ddfd1dd0-e20f-4f09-9c18-3637223eabef
+
+
+
