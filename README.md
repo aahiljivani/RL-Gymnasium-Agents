@@ -21,3 +21,26 @@ After training the agent on 50,000 episodes we now test this on ten games which 
 <img width="475" height="505" alt="Screenshot 2025-09-15 at 4 54 56 PM" src="https://github.com/user-attachments/assets/4995b975-3282-4f69-9eaa-3d7832ece8f1" />
 
 
+# **Deep Q-Network (DQN) — CartPole-v1**
+
+I also implemented a modern DQN agent for CartPole-v1, which includes an experience replay buffer using a deque, Target network, policy network and an adaptive epsilon-greedy strategy (decaying epsilon). This DQN has the following hyperparameters:
+
+batch size: 32, epsilon decay: 0.98, learning rate: 1e-3, hidden layer size: 32
+
+# Results
+
+The DQN agent surpassed the "solved" threshold (average reward ≥195 over 100 episodes) by episode 100, achieving an average reward of 222.4. Please see below for the sample log:
+
+Episode 0/500, Avg Reward: 23.00, Epsilon: 0.980
+Episode 50/500, Avg Reward: 31.56, Epsilon: 0.357
+Episode 100/500, Avg Reward: 222.42, Epsilon: 0.130
+Episode 150/500, Avg Reward: 217.46, Epsilon: 0.047
+Episode 200/500, Avg Reward: 193.94, Epsilon: 0.017
+Episode 250/500, Avg Reward: 203.72, Epsilon: 0.010
+Episode 300/500, Avg Reward: 170.04, Epsilon: 0.010
+Episode 350/500, Avg Reward: 213.18, Epsilon: 0.010
+Episode 400/500, Avg Reward: 270.96, Epsilon: 0.010
+Episode 450/500, Avg Reward: 222.08, Epsilon: 0.010
+Training complete!
+
+After initial exploration, performance jumps rapidly to optimal policies and continues strong play, with occasional fluctuation, quite typical for a DQN.
