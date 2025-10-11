@@ -27,19 +27,19 @@ class DQN(nn.Module):
 
 class DQN_Agent():
     def __init__(self):
-        self.env = gym.make("LunarLander-v3", render_mode = "human")
-        self.batch_size = 32
-        self.memory = deque(maxlen=5000)
-        self.epsilon = 1.0
-        self.epsilon_decay = 0.995
+        self.env = gym.make("CartPole-v1", render_mode = "human")
+        self.batch_size = 32 # or try 64, 32
+        self.memory = deque(maxlen=10000)
+        self.epsilon = 1.0 #  try 1, 0.95, 0.9
+        self.epsilon_decay = 0.98 # this rate works well for cartpole, try 0.995 for lunarlander
         self.gamma = 0.99
-        self.learning_rate = 1e-3
+        self.learning_rate = 1e-3 # 3e-4 if model is overfitting, this has worked well for cartpole
         self.epsilon_min = 0.01
         self.rewards = []
         # set DQN inputs
         self.state_size = self.env.observation_space.shape[0]
         self.action_size = self.env.action_space.n
-        self.hidden_size = 128
+        self.hidden_size = 64 # try 32 to prevent overfitting
 
         self.policy = DQN(self.state_size, self.hidden_size, self.action_size)
         self.target = DQN(self.state_size, self.hidden_size, self.action_size)
@@ -65,7 +65,7 @@ class DQN_Agent():
 
 
     def sgd(self):
-        if len(self.memory) <= self.batch_size:
+        if len(self.memory) < self.batch_size:
             return None
         else:
             # sample a batch from memory
@@ -119,7 +119,7 @@ class DQN_Agent():
                 loss_val = self.sgd()
                 step += 1
             # sync target network to policy network
-            if episode % 10 == 0:
+            if episode % 5 == 0:
                 self.sync()
             # epsilon decay
             if self.epsilon > self.epsilon_min:
@@ -135,10 +135,9 @@ class DQN_Agent():
         return self.rewards
 
 
-
 if __name__ == "__main__":
     agent = DQN_Agent()
-    rewards = agent.train(episodes=1000)
+    rewards = agent.train(episodes=500)
     print("Training complete!")
 
 
