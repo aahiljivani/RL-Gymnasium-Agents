@@ -1,8 +1,11 @@
 
 # **RL Methods implemented from scratch on Gymnasium Libraries.**
 
-In this project, I built an agent that plays Blackjack based on the Monte Carlo First Visit Method with Exploring Starts.
+In this project we haveMonte Carlo methods, TD On-Policy and Off-Policy Methods, as well as Value-Based DRL Methods.
 
+I built an agent that plays Blackjack based on the Monte Carlo First Visit Method with Exploring Starts. Implemented TD_learning with SARSA for taxi, and built a DQN for Cartpole.
+
+# MC Blackjack
 The project starts by creating the environment and visualizing the sample action and observation spaces. We set the render mode to rgb_array so we can visualize the agent playing the game.
 
 Through initializing the Q_dict, we are able to record state-action pairs as keys. The keys have values being the calculated returns, which are updated iteratively after termination of the episode. Before we can do that though, we need a list that records each visit to the next state, the action taken and reward received as a tuple for each episode. 
