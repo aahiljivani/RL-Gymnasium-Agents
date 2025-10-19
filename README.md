@@ -1,7 +1,7 @@
 
 # **RL Methods implemented from scratch on Gymnasium Libraries.**
 
-In this project we haveMonte Carlo methods, TD On-Policy and Off-Policy Methods, as well as Value-Based DRL Methods.
+In this project we have Monte Carlo methods, TD On-Policy and Off-Policy Methods, as well as Value-Based DRL Methods.
 
 I built an agent that plays Blackjack based on the Monte Carlo First Visit Method with Exploring Starts. Implemented TD_learning with SARSA for taxi, and built a DQN for Cartpole.
 
