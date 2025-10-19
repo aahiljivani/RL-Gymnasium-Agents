@@ -34,7 +34,7 @@ class DQN_Agent():
         self.state_space = self.env.observation_space.shaoe[0]
         self.hidden_layers = 64
 
-        self.transition = NamedTuple('Transition', ('state', 'action', 'reward', 'done', 'truncated'))
+        self.transition = NamedTuple('Transition', ('state', 'action', 'reward', 'next_state', 'done', 'truncated'))
         self.replay_buffer = deque(maxlen=10000) # replay buffer
         self.batch_size = 64
         self.alpha = 3e-4 # learning rate
@@ -51,7 +51,21 @@ class DQN_Agent():
         self.rewards = []
 
 
-    def epsilon_greedy(self):
-        
+    def epsilon_greedy(self, state):
+        if np.random.rand < self.epsilon:
+            return self.env.action_space.sample()
+
+        else:
+            with torch.no_grad():
+                self.policy(state)
+
+    def train_agent(self, episodes):
+        for _ in range(episodes):
+            state = self.env.reset()
+            while not (done or truncated):
+
+                action = self.epsilon_greedy(state)
+
+            
 
 
