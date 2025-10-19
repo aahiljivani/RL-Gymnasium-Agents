@@ -1,5 +1,5 @@
-# RL-Gymnasium-Agents
-**RL Methods implemented from scratch on Gymnasium Libraries.**
+
+# **RL Methods implemented from scratch on Gymnasium Libraries.**
 
 In this project, I built an agent that plays Blackjack based on the Monte Carlo First Visit Method with Exploring Starts.
 
