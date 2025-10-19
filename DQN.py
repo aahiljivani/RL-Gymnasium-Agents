@@ -42,7 +42,7 @@ class DQN_Agent():
         self.epsilon_decay = 0.995 
         self.gamma = 0.99
         self.learning_rate = 3e-4  # Lower for stability
-        self.epsilon_min = 0.01
+        self.epsilon_min = 0.17 # this value is carefully chosen after much experimentation
         self.rewards = []
         # DQN inputs
         self.state_size = self.env.observation_space.shape[0]
@@ -52,11 +52,11 @@ class DQN_Agent():
         self.policy = DQN(self.state_size, self.hidden_size, self.action_size)
         self.target = DQN(self.state_size, self.hidden_size, self.action_size)
         self.target.load_state_dict(self.policy.state_dict())
-
-        self.optimizer = optim.Adam(self.policy.parameters(), lr=self.learning_rate)
+        # Alternatively, we can use Adam, RMSprop is better for high variance, non-stationary environments
+        self.optimizer = optim.RMSprop(self.policy.parameters(), lr=self.learning_rate)
         self.loss = nn.MSELoss()
 
-    # we can decay epsilon multiplicatively 
+    # decay epsilon multiplicatively within the training loop
     def epsilon_greedy(self, state):
         if np.random.rand() < self.epsilon:
             return self.env.action_space.sample()
@@ -65,7 +65,7 @@ class DQN_Agent():
                 # Unsqueeze for batch dimension (state is (4,) -> (1, 4))
                 q_values = self.policy(state.unsqueeze(0))
                 return q_values.argmax().item()
-
+# sync the policy model weights and biases with the target model weights and biases
     def sync(self):
         '''Sync the policy model weights and biases with the target model weights and biases'''
         self.target.load_state_dict(self.policy.state_dict())
@@ -82,7 +82,7 @@ class DQN_Agent():
             # Format batches
             batch = Transition(*zip(*sample_batch))
 
-            # Stack tensors (states/next_states are (4,) -> stack to (batch, 4))
+            # Stack tensors
             states = torch.stack(batch.state)
             actions = torch.LongTensor(batch.action).unsqueeze(1)
             next_states = torch.stack(batch.next_state)
@@ -149,4 +149,7 @@ class DQN_Agent():
 if __name__ == "__main__":
     agent = DQN_Agent()
     rewards = agent.train(episodes=1000)
+    # now we save the model weights and biases
+    torch.save(agent.policy.state_dict(), "DDQN_model.pth")
+    torch.save(agent.target.state_dict(), "DDQN_target_model.pth")
     print("Training complete!")

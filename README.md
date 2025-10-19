@@ -23,46 +23,18 @@ After training the agent on 50,000 episodes we now test this on ten games which 
 
 # **Deep Q-Network (DQN) — CartPole-v1**
 
-I also implemented a modern DQN agent for CartPole-v1. The implementation was inspired by Mnih, V., Kavukcuoglu, K., Silver, D., et al. (2013). Playing Atari with Deep Reinforcement Learning. arXiv:1312.5602. This implementation includes an experience replay buffer using a deque, Target network, policy network and an adaptive epsilon-greedy strategy (decaying epsilon). 
+ The network structure consists of three fully connected layers with ReLU activations. He (Kaiming) weight initialization is used to stabilize gradients, since we use Relu activation functions. Epsilon-greedy exploration decays exponentially by 0.995 each episode and capped at a lower bound of 0.17. The cap is based on experimental results showing a sharp performance decline below this threshold.
+
+The optimizer is RMSProp, chosen over Adam due to its ability to handle non-stationary and high-variance data, as Adam’s momentum term sometimes destabilized training in previous experiments. The agent uses a uniform replay buffer of up to 10,000 transitions, with minibatches of 64 drawn after a warmup period of 1,000 samples. A target network is maintained and synchronized with the policy network every 1,000 steps. The loss function is mean squared error between current and target Q-values.
+
+Limitations include the lack of prioritized experience replay, which would focus learning on more important transitions, and the absence of Double DQN (DDQN), which reduces overestimation bias in Q-learning. Incorporating these techniques would likely improve stability and sample efficiency.
+
+During training, average rewards increased from about r = 11 at the start to r > 220 by episode 300, peaking over r = 300 during episodes 350-400 on average. After epsilon reached its minimum value, average rewards hovered between 170 and 230. The results confirm the agent is learning, but also indicate further optimization is required.
 
 The pseudocode implementation is written as follows:
 
 <img width="972" height="497" alt="Screenshot 2025-10-11 at 5 56 01 PM" src="https://github.com/user-attachments/assets/6a7c9c41-0253-4de9-b34b-0870e582b195" />
 
-
-# Results
-
-This DQN has the following hyperparameters:
-
-batch size: 32, epsilon decay: 0.98, learning rate: 1e-3, hidden layer size: 32
-
-The DQN agent surpassed the "solved" threshold (average reward ≥195 over 100 episodes) by episode 100, achieving an average reward of 222.4. Please see below for the sample log:
-
-Episode 0/500, Avg Reward: 23.00, Epsilon: 0.980
-
-Episode 50/500, Avg Reward: 31.56, Epsilon: 0.357
-
-Episode 100/500, Avg Reward: 222.42, Epsilon: 0.130
-
-Episode 150/500, Avg Reward: 217.46, Epsilon: 0.047
-
-Episode 200/500, Avg Reward: 193.94, Epsilon: 0.017
-
-Episode 250/500, Avg Reward: 203.72, Epsilon: 0.010
-
-Episode 300/500, Avg Reward: 170.04, Epsilon: 0.010
-
-Episode 350/500, Avg Reward: 213.18, Epsilon: 0.010
-
-Episode 400/500, Avg Reward: 270.96, Epsilon: 0.010
-
-Episode 450/500, Avg Reward: 222.08, Epsilon: 0.010
-
-
-After initial exploration, performance jumps rapidly to optimal policies and continues strong play, with occasional fluctuation, quite typical for a DQN.
-
-
-https://github.com/user-attachments/assets/ddfd1dd0-e20f-4f09-9c18-3637223eabef
 
 
 
