@@ -149,7 +149,4 @@ class DQN_Agent():
 if __name__ == "__main__":
     agent = DQN_Agent()
     rewards = agent.train(episodes=1000)
-    # now we save the model weights and biases
-    torch.save(agent.policy.state_dict(), "DDQN_model.pth")
-    torch.save(agent.target.state_dict(), "DDQN_target_model.pth")
     print("Training complete!")
