@@ -11,10 +11,10 @@ from collections import namedtuple, deque
 
 class DQN(nn.Module):
     def __init__(self, state_size, hidden_size, action_size):
-        super().__init__
+        super().__init__()
         self.fc1 = nn.Linear(state_size, hidden_size)
         self.fc2 = nn.Linear(hidden_size, hidden_size)
-        self,fc3 = nn.Linear(hidden_size, action_size)
+        self.fc3 = nn.Linear(hidden_size, action_size)
 
         
 
@@ -27,9 +27,9 @@ class DQN(nn.Module):
 
 
 class DQN_Agent():
-    def __init__(self, str(env)):
+    def __init__(self, str:env):
         # set the environment variables
-        self.env = gym.make(str(env), render_mode = "human")
+        self.env = gym.make(str(env))
         self.action_space = self.env.action_space.n
         self.state_space = self.env.observation_space.shaoe[0]
         self.hidden_layers = 64
@@ -52,7 +52,7 @@ class DQN_Agent():
 
 
     def epsilon_greedy(self, state):
-        if np.random.rand < self.epsilon:
+        if np.random.rand() < self.epsilon:
             return self.env.action_space.sample()
 
         else:
@@ -62,23 +62,42 @@ class DQN_Agent():
                 return np.argmax(q_values.unsqueeze)
 
 
+    def sample_batch(self):
+
+        return random.sample(self.replay_buffer, self.batch_size)
+
+    def sgd(self):
+        if len(self.replay_buffer) < self.batch_size:
+            return None
+        else:
+            batch = self.sample_batch()
+
+
+
+
     def train_agent(self, episodes):
         for _ in range(episodes):
-            state = self.env.reset()
+            state,_ = self.env.reset()
             state = torch.tensor(state).unsqueeze(0) # reformatted for forward pass through NN
+            done = False
+            truncated = False
+
             while not (done or truncated):
 
                 action = self.epsilon_greedy(state)
                 next_state, reward, done, truncated, _ = self.env.step(action)
                 next_state = torch.tensor(next_state).unsqueeze(0) # reformatted for batch pass
-                self.transition(state, action, reward, next_state) # format into tuple
+                self.transition(state, action, reward, next_state, done, truncated) # format into tuple
                 # save transition to memory
                 self.replay_buffer.append(self.transition)
 
-
-
-
-
-            
+                # sample mini-batch of transition
+                batch = self.sample_batch()
+                # categorize all mini-batch tuple elements 
+                states, actions, rewards, next_states, dones, truncs = zip(*batch)
+                # we will be computing q values for every element of the batch
+                # it is important that we keep everything aligned in tensor format.
+                states = torch.stack(states)
+                actions = torch.tensor(actions).unsqueeze(0)
 
 
