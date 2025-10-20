@@ -46,8 +46,8 @@ class DQN_Agent():
         # policy and target networks
         self.policy = DQN(self.state_space, self.hidden_layers, self.action_space)
         self.target = DQN(self.state_space, self.hidden_layers, self.action_space)
-        self.target.load_state_dict(self.policy.state_dict())
-        self.step = 0
+        self.target.load_state_dict(self.policy.state_dict()) # load the same weights from the policy onto the network
+        self.step = 0 # global step counter
         self.rewards = []
 
 
@@ -57,14 +57,27 @@ class DQN_Agent():
 
         else:
             with torch.no_grad():
-                self.policy(state)
+                q_values = self.policy(state)
+                
+                return np.argmax(q_values.unsqueeze)
+
 
     def train_agent(self, episodes):
         for _ in range(episodes):
             state = self.env.reset()
+            state = torch.tensor(state).unsqueeze(0) # reformatted for forward pass through NN
             while not (done or truncated):
 
                 action = self.epsilon_greedy(state)
+                next_state, reward, done, truncated, _ = self.env.step(action)
+                next_state = torch.tensor(next_state).unsqueeze(0) # reformatted for batch pass
+                self.transition(state, action, reward, next_state) # format into tuple
+                # save transition to memory
+                self.replay_buffer.append(self.transition)
+
+
+
+
 
             
 
